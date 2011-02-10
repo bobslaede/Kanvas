@@ -22,6 +22,8 @@
   <link rel="stylesheet" href="css/style.css?v=2">
   <script src="js/libs/modernizr-1.6.min.js"></script>
 	<style>
+	html { overflow:hidden; }
+	#tools { position:absolute; margin:10px; top:0; left:0; width:200px; }
 	</style>
 </head>
 
@@ -29,9 +31,34 @@
 
 	<canvas id="canvas" width="800" height="600"></canvas>
 	
+	<div id="tools">
+		<input type="range" min="-30" max="30" value="0" id="rotation">
+	</div>
 	
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+	<script>
+	if ( !Function.prototype.bind ) {
+
+	  Function.prototype.bind = function( obj ) {
+	    var slice = [].slice,
+	        args = slice.call(arguments, 1), 
+	        self = this, 
+	        nop = function () {}, 
+	        bound = function () {
+	          return self.apply( this instanceof nop ? this : ( obj || {} ), 
+	                              args.concat( slice.call(arguments) ) );    
+	        };
+
+	    nop.prototype = self.prototype;
+	
+	    bound.prototype = new nop();
+	
+	    return bound;
+	  };
+	}	
+	</script>
 	<script src="/js/kanvas2/vector.js"></script>
+	<script src="/js/kanvas2/line.js"></script>
 	<script src="/js/kanvas2/shape.js"></script>
 	<script src="/js/kanvas2/rect.js"></script>
 	<script src="/js/kanvas2/view.js"></script>

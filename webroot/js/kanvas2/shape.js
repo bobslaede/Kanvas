@@ -2,8 +2,14 @@
 ;(function(window, Math){
 	
 	var Shape = function() {
+		this.init();
+	};
+
+	Shape.prototype.init = function() {
 		this.points = [];
-		this.fill = false;
+		this.a = 0;
+		this.d = 0;
+		this.scale = 1;
 	};
 
 	Shape.prototype.addPoint = function() {
@@ -16,7 +22,6 @@
 	Shape.prototype.withinBounds = function(vector) {
 		var v0 = vector,
 			j = this.points.length-1,
-			res = [],
 			v1,
 			v2,
 			test,
@@ -26,14 +31,12 @@
 			v2 = this.points[j];
 			if (v1 && v2) {
 				test = (v1.x * v2.y - v1.y * v2.x - v0.x * v2.y + v0.y * v2.x + v0.x * v1.y - v0.y * v1.x);
-				res.push(~~test);
+				if (test > 0) return false;
 			}
 			j = i;
 		}
 
-		max = Math.max.apply(Math, res);
-
-		return max < 0;
+		return true;
 	};
 
 	Shape.prototype.setOrigin = function() {
@@ -55,9 +58,35 @@
 		return Vector.max.apply(Vector, this.points);
 	};
 
+	Shape.prototype.scaleTo = function(scalar) {
+		var prevS = this.scale;
+		var newS = scalar - this.scale;
+		console.log(prevS, scalar, newS);
+		return this.scaleBy(scalar);
+	};
+
+	Shape.prototype.scaleBy = function(scalar) {
+		this.scale += scalar;
+		for (var i = 0, l = this.points.length; i < l; i++) {
+			this.points[i].multiplyScalar(this.scale);
+		}
+		this.setOrigin();
+		return this;
+	};
+	
+	Shape.prototype.rotateTo = function(angle) {
+		var prevA = this.a;
+		var newA = angle - prevA;
+		return this.rotateBy(newA);
+	};
+
 	Shape.prototype.rotate = function(angle) {
-		this.a = angle;
-		this.d = this.a * Math.PI / 180;
+		return this.rotateTo(angle);
+	};
+
+	Shape.prototype.rotateBy = function(angle) {
+		this.a += angle;
+		this.d = angle * Math.PI / 180;
 		var x0 = this.origin.x,
 			y0 = this.origin.y,
 			cosT = Math.cos(this.d),

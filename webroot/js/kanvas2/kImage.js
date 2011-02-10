@@ -13,6 +13,8 @@
 	kImage.prototype.rotate = function(angle) {
 		this.angle = angle;
 		this.deg = angle * Math.PI / 180;
+		this.rect.rotate(angle);
+		return this;
 	};
 	
 	return window['kImage'] = kImage;

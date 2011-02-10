@@ -25,6 +25,24 @@
 		this.height = Vector.distance(tr, br);
 		return this;
 	};
+	
+	Rect.prototype.getIntersectionPoints = function(rect) {
+		return;
+		var p1 = this.points;
+		var p2 = rect.points;
+		var p2L = p2.length;
+		for (var i = 0, l = p1.length, j = 1; i < l; i++, j++) {
+			if (j == l) j = 0;
+			var line1 = new Line(p1[i], p1[j]);
+			for (var o = 0, p = p2L, q = 1; o < p; o++, q++) {
+				if (q == p) q = 0;
+				var line2 = new Line(p2[o], p2[q]);
+				var v = line1.intersect(line2);
+				kanvas.drawLine(line1);
+				kanvas.drawLine(line2);
+			}
+		}
+	};
 
 	Rect.prototype.withinRect = function(rect) {
 		var trues = 0,

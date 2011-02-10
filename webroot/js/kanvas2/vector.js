@@ -12,6 +12,7 @@
 	Vector.prototype.multiplyScalar = function(scalar) {
 	    this.x *= scalar;
 	    this.y *= scalar;
+			return this;
 	};
 	
 	Vector.distance = function(v1, v2) {

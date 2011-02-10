@@ -1,11 +1,14 @@
 ;(function(window, Math){
 	
-	var View = function(x, y, width, height) {
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		this.rect = new Rect(x, y, width, height);
+	var View = function(min, max) {
+		this.min = min;
+		this.max = max;
+		var x = min.x,
+			y = min.y;
+		this.width = this.getWidth(),
+		this.height = this.getHeight();
+
+		this.rect = new Rect(x, y, this.width, this.height);
 		this.corners = {};
 		this.options = {
 			cornerSize : 10
@@ -17,22 +20,16 @@
 		this.addCorners();
 	};
 
-	View.prototype.clone = function() {
-		return new View(this.x, this.y, this.width, this.height);
-	};
-
 	View.prototype.draw = function(ctx) {
 		this.rect.draw(ctx);
 	};
 
 	View.prototype.getWidth = function() {
-		//return Vector.distance(this.rect.points[0], this.rect.points[1]);
-		return this.rect.points[1].x - this.rect.points[0].x;
+		return this.max.x - this.min.x;
 	};
 
 	View.prototype.getHeight = function() {
-		// return Vector.distance(this.rect.points[1], this.rect.points[2]);
-		return this.rect.points[2].y - this.rect.points[1].y;
+		return this.max.y - this.min.y;
 	};
 
 	View.prototype.addCorners = function(angle) {
@@ -41,13 +38,13 @@
 			mX = cW / 2,
 			mY = cH / 2;
 
-		var tl = new Rect(this.rect.points[0].x-mX, this.rect.points[0].y-mY, cH, cW);
+		var tl = new Rect(this.min.x-mX, this.min.y-mY, cH, cW);
 
-		var tr = new Rect(this.rect.points[1].x-mX, this.rect.points[1].y-mY, cH, cW);
+		var tr = new Rect(this.max.x-mX, this.min.y-mY, cH, cW);
 
-		var br = new Rect(this.rect.points[2].x-mX, this.rect.points[2].y-mY, cH, cW);
+		var br = new Rect(this.max.x-mX, this.max.y-mY, cH, cW);
 
-		var bl = new Rect(this.rect.points[3].x-mX, this.rect.points[3].y-mY, cH, cW);
+		var bl = new Rect(this.min.x-mX, this.max.y-mY, cH, cW);
 
 		this.corners.tl = tl
 		this.corners.tr = tr;
